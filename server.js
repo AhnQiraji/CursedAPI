@@ -14,6 +14,16 @@ const jsonParser = express.json();
 //   console.log(data);  // выводим считанные данные
 // });
 
+class User {
+  constructor(name, email, password, id, avatar) {
+    this.name = name;
+    this.email = email;
+    this.password = password;
+    this.id = id;
+    this.avatar = avatar;
+  }
+}
+
  
 // настройка CORS
 app.use(function(req, res, next) {
@@ -23,7 +33,7 @@ app.use(function(req, res, next) {
   next();  // передаем обработку запроса методу app.post("/postuser"...
 });
 
-app.get("/userDB", function(req, res){
+app.get("/getUser", function(req, res){
   const email = req.query.email;
   const password = req.query.password;
   const content = fs.readFileSync("Users.txt", "utf8");
@@ -38,7 +48,7 @@ app.get("/userDB", function(req, res){
     if (user.password === password) {
       res.send(user);
     } else {
-      res.send('Wrong password');
+      res.send({'error': "wrong password"});
     }
   } else {
     res.status(404).send();
@@ -59,36 +69,28 @@ app.get("/userDB/lastUser", function(req, res){
   }
 });
 
-// app.get("/userDB", jsonParser, function (request, response) {
-//   // если не переданы данные, возвращаем ошибку
-//   // if(!request.body) return response.sendStatus(400);
-    
-//   // получаем данные
-//   // let username = request.body.name;
-//   // let userage = request.body.age;
-//   // имитируем некоторую обработку данных, например, изменим значение userage
-//   // userage = userage + 10;
-    
-//   // отправка данных обратно клиенту
-//   let readUsers = fs.readFileSync("Users.txt", "utf8");
-//   console.log(typeof(readUsers))
-//   response.json(JSON.parse(readUsers));
-// });
+
   
-// обработчик по маршруту localhost:3000/postuser
-app.post("/postuser", jsonParser, function (request, response) {
- 
+
+app.post("/postUser", jsonParser, function (req, res) {
   // если не переданы данные, возвращаем ошибку
-  if(!request.body) return response.sendStatus(400);
-    
-  // получаем данные
-  let username = request.body.name;
-  let userage = request.body.age;
-  // имитируем некоторую обработку данных, например, изменим значение userage
-  userage = userage + 10;
+  if(!req.body) return res.sendStatus(400);
+  let email = req.body.email;
+  let password = req.body.password;
+  let name = req.body.name;
+  const content = fs.readFileSync("Users.txt", "utf8");
+  const users = JSON.parse(content);
+  let user = users.find(user => user.email === email);
+  if (user) {
+    res.send({'error': "Email is already registered"});
+  } else {
+    let id = +users.at(-1).id + 1 + '';
+    user = new User(email, name, password, id, 1);
+    console.log(user)
+  }
     
   // отправка данных обратно клиенту
-  response.json({"name": username, "age": userage});
+  // response.json({"name": username, "age": userage});
 });
   
 app.listen(3000);
