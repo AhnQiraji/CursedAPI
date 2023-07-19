@@ -7,10 +7,10 @@ const jsonParser = express.json();
 
 
 
-// fs.appendFile("Users.txt", "Привет МИД!", function(error){
+// fs.appendFile("Users.json", "Привет МИД!", function(error){
 //   if(error) throw error; // если возникла ошибка
 //   console.log("Запись файла завершена. Содержимое файла:");
-//   let data = fs.readFileSync("Users.txt", "utf8");
+//   let data = fs.readFileSync("Users.json", "utf8");
 //   console.log(data);  // выводим считанные данные
 // });
 
@@ -33,10 +33,10 @@ app.use(function(req, res, next) {
   next();  // передаем обработку запроса методу app.post("/postuser"...
 });
 
-app.get("/getUser", function(req, res){
+app.get("/login", function(req, res){
   const email = req.query.email;
   const password = req.query.password;
-  const content = fs.readFileSync("Users.txt", "utf8");
+  const content = fs.readFileSync("Users.json", "utf8");
   const users = JSON.parse(content);
   const user = users.find(user => {
     if (user.email === email) {
@@ -57,7 +57,7 @@ app.get("/getUser", function(req, res){
 
 app.get("/userDB/lastUser", function(req, res){
        
-  const content = fs.readFileSync("Users.txt", "utf8");
+  const content = fs.readFileSync("Users.json", "utf8");
   const users = JSON.parse(content);
   let user = users.at(-1);
   // отправляем пользователя
@@ -72,25 +72,24 @@ app.get("/userDB/lastUser", function(req, res){
 
   
 
-app.post("/postUser", jsonParser, function (req, res) {
+app.post("/registration", jsonParser, function (req, res) {
   // если не переданы данные, возвращаем ошибку
   if(!req.body) return res.sendStatus(400);
   let email = req.body.email;
   let password = req.body.password;
   let name = req.body.name;
-  const content = fs.readFileSync("Users.txt", "utf8");
+  const content = fs.readFileSync("Users.json", "utf8");
   const users = JSON.parse(content);
   let user = users.find(user => user.email === email);
   if (user) {
     res.send({'error': "Email is already registered"});
   } else {
     let id = +users.at(-1).id + 1 + '';
-    user = new User(email, name, password, id, 1);
-    console.log(user)
+    user = new User(name, email, password, id, 1);
+    users.push(user);
+    fs.writeFileSync("Users.json", JSON.stringify(users));
   }
-    
-  // отправка данных обратно клиенту
-  // response.json({"name": username, "age": userage});
+  res.send({"result": "complete"})
 });
   
 app.listen(3000);
