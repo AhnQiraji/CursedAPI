@@ -71,20 +71,17 @@ app.get("/login", function(req, res){
   }
 });
 
-app.get("/userDB/lastUser", function(req, res){
-       
-  const content = fs.readFileSync("Users.json", "utf8");
-  const users = JSON.parse(content);
-  let user = users.at(-1);
-  // отправляем пользователя
-  if(user){
-    res.send(user);
-  }
-  else{
-    res.status(404).send();
+
+app.get("/getTask", function(req, res){
+  console.log('get task working')
+  const content = fs.readFileSync("Tasks.json", "utf8");
+  const tasks = JSON.parse(content);
+  if (tasks) {
+    res.send(JSON.stringify(tasks));
+  } else {
+    res.send({'error': "No tasks"});
   }
 });
-
 
 // POST
   
