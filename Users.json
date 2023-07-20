@@ -1,44 +1,37 @@
 [
   {
-    "email": "e@mail.ru",
     "name": "Test",
+    "email": "e@mail.ru",
     "password": "1234",
     "id": "1",
     "avatar": "1"
   },
   {
-    "email": "q@mail.ru",
     "name": "Test2",
+    "email": "q@mail.ru",
     "password": "1234",
     "id": "2",
     "avatar": "1"
   },
   {
-    "email": "w@mail.ru",
     "name": "Test3",
+    "email": "w@mail.ru",
     "password": "1234",
     "id": "3",
     "avatar": "1"
   },
   {
-    "email": "r@mail.ru",
     "name": "Test4",
+    "email": "r@mail.ru",
     "password": "1234",
     "id": "4",
     "avatar": "1"
   },
   {
-    "email": "t@mail.ru",
     "name": "Test5",
+    "email": "t@mail.ru",
     "password": "1234",
     "id": "5",
     "avatar": "1"
-  },
-  {
-    "name": "test",
-    "email": "test@mail.ru",
-    "password": "1234",
-    "id": "6",
-    "avatar": 1
   }
 ]
